@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <!-- Label for the launch daemon.  This must be unique on the system. -->
+        <key>Label</key>
+        <string>com.proxymon.daemon</string>
+
+        <!-- The script to run at startup.  Adjust the path if you place the
+             script somewhere other than /usr/local. -->
+        <key>ProgramArguments</key>
+        <array>
+            <string>/usr/local/proxymon.sh</string>
+        </array>
+
+        <!-- Ensure the daemon runs when the system boots. -->
+        <key>RunAtLoad</key>
+        <true/>
+    </dict>
+</plist>

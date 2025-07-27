@@ -1,20 +1,24 @@
-# Jamf Scripts & Automations
+# Proxymon
 
-A growing collection of battle-tested scripts and deployment examples for Jamf Pro, covering common, complex, and quirky macOS management tasks.
+Proxymon is a lightweight Bash monitor that toggles a Proxy Auto‑Config (PAC) URL on or off based solely on network reachability.  When the PAC host is resolvable, the script enables the PAC across all network services; when unreachable, it disables the PAC【156276101027233†L155-L199】.  Network change events (DNS or interface status) are tracked via `notifyutil` for immediate reaction【156276101027233†L155-L199】.  This stripped‑back approach avoids user state tracking and Wi‑Fi toggling to reduce risk and complexity【156276101027233†L155-L198】.
 
-Each subfolder is a real-world initiative, complete with step-by-step instructions, sample code, and “works in production” tips. Contributions and feedback are always welcome!
+## Files
 
-## Initiatives
+| File | Description |
+| --- | --- |
+| **proxymon.sh** | The main Bash script.  Edit the `hostName` and `pacFileUrl` variables at the top to point to your PAC host and PAC file【156276101027233†L166-L169】.  The script listens for network changes and toggles the autoproxy settings accordingly. |
+| **com.proxymon.daemon.plist** | Launch Daemon plist that runs the script at system startup【156276101027233†L201-L217】.  Adjust the `ProgramArguments` path if you place the script somewhere other than `/usr/local/proxymon.sh`. |
 
-- [`network-pac-watcher`](./network-pac-watcher): Automagic PAC file and Wi-Fi management for macOS, featuring Abracadabra Industries as our whimsical demo company.
-- [`set-computername-serial`](./set-computername-serial): Instantly sets a Mac’s computer name to its serial number and updates the Jamf server—handy for enforcing naming standards at deployment or en masse.
-- [`forget-wifi`](./forget-wifi): Allows standard users to forget Wi‑Fi networks and edit network prefs without admin prompts by tweaking authorizationdb and airport settings.
-- [`proxymon`](./proxymon): Simple proxy monitor for macOS that toggles a PAC file on or off depending on the reachability of your corporate host; includes a LaunchDaemon for continuous monitoring.
+## Deployment
 
+1. Copy `proxymon.sh` to `/usr/local/proxymon.sh` and ensure it has executable permissions.
+2. Copy `com.proxymon.daemon.plist` to `/Library/LaunchDaemons/com.proxymon.daemon.plist`.
+3. Use a management tool such as Jamf Pro to deploy the files and run:
 
-(More folders coming soon!)
+   ```bash
+   launchctl load /Library/LaunchDaemons/com.proxymon.daemon.plist
+   ```
 
----
+   This loads the daemon and causes the script to monitor network changes immediately【156276101027233†L219-L225】.
 
-Author: George Mihailovski  
-Website: [bygeorge.io](https://bygeorge.io)
+By focusing solely on proxy configuration, Proxymon is easy to maintain and integrates smoothly into existing management workflows【156276101027233†L155-L198】.
